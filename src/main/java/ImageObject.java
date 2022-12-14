@@ -17,7 +17,7 @@ public class ImageObject {
 
     public ImageObject() {
         try {
-            File imageFile = new File("src/Broadway_tower_edit.jpg");
+            File imageFile = new File(ImageObject.class.getResource("Broadway_tower_edit.jpg").getPath());
             image = ImageIO.read(imageFile);
             generatePixelArray();
             generateEnergyGrid();
