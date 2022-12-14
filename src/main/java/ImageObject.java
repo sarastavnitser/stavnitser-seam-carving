@@ -7,10 +7,10 @@ import java.io.*;
 import static javax.imageio.ImageIO.read;
 
 public class ImageObject {
-    private BufferedImage image = null;
-    private Color[][] pixelGrid = null;
+    private BufferedImage image;
+    private Color[][] pixelGrid;
 
-    private int[][] energyGrid = null;
+    private int[][] energyGrid;
     private int height;
 
     private int width;
@@ -48,11 +48,11 @@ public class ImageObject {
                     continue;
                 } else {
                     int energy = (int) (Math.pow(pixelGrid[i - 1][j].getRed() - pixelGrid[i + 1][j].getRed(), 2) +
-                                                Math.pow(pixelGrid[i - 1][j].getGreen() - pixelGrid[i + 1][j].getGreen(), 2) +
-                                                Math.pow(pixelGrid[i - 1][j].getBlue() - pixelGrid[i + 1][j].getBlue(), 2) +
-                                                Math.pow(pixelGrid[i][j + 1].getRed() - pixelGrid[i][j - 1].getRed(), 2) +
-                                                Math.pow(pixelGrid[i][j + 1].getGreen() - pixelGrid[i][j - 1].getGreen(), 2) +
-                                                Math.pow(pixelGrid[i][j + 1].getBlue() - pixelGrid[i][j - 1].getBlue(), 2));
+                            Math.pow(pixelGrid[i - 1][j].getGreen() - pixelGrid[i + 1][j].getGreen(), 2) +
+                            Math.pow(pixelGrid[i - 1][j].getBlue() - pixelGrid[i + 1][j].getBlue(), 2) +
+                            Math.pow(pixelGrid[i][j + 1].getRed() - pixelGrid[i][j - 1].getRed(), 2) +
+                            Math.pow(pixelGrid[i][j + 1].getGreen() - pixelGrid[i][j - 1].getGreen(), 2) +
+                            Math.pow(pixelGrid[i][j + 1].getBlue() - pixelGrid[i][j - 1].getBlue(), 2));
 
                     energyGrid[i][j] = energy;
                 }
@@ -63,7 +63,6 @@ public class ImageObject {
 
     public static void main(String[] args) {
         ImageObject m = new ImageObject();
-
     }
 }
 
