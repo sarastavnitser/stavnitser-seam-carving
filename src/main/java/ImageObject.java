@@ -8,19 +8,26 @@ import static javax.imageio.ImageIO.read;
 
 public class ImageObject {
     private BufferedImage image;
+
+
+    private EnergyGrid energyGrid;
     private Color[][] pixelGrid;
 
-    private int[][] energyGrid;
+
     private int height;
 
     private int width;
 
+
     public ImageObject() {
         try {
-            File imageFile = new File(ImageObject.class.getResource("Broadway_tower_edit.jpg").getPath());
+            File imageFile = new File(ImageObject.class.getResource("camera-icon.png").getPath());
             image = ImageIO.read(imageFile);
             generatePixelArray();
-            generateEnergyGrid();
+
+            energyGrid = new EnergyGrid(pixelGrid, height, width);
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,7 +38,8 @@ public class ImageObject {
         width = image.getWidth();
         height = image.getHeight();
         pixelGrid = new Color[height][width];
-        energyGrid = new int[height][width];
+
+
 
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
@@ -39,30 +47,32 @@ public class ImageObject {
             }
         }
 
+
     }
-
-    public void generateEnergyGrid() {
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                if (i == 0 || j == 0 || i == height - 1 || j == width - 1) {
-                    continue;
-                } else {
-                    int energy = (int) (Math.pow(pixelGrid[i - 1][j].getRed() - pixelGrid[i + 1][j].getRed(), 2) +
-                            Math.pow(pixelGrid[i - 1][j].getGreen() - pixelGrid[i + 1][j].getGreen(), 2) +
-                            Math.pow(pixelGrid[i - 1][j].getBlue() - pixelGrid[i + 1][j].getBlue(), 2) +
-                            Math.pow(pixelGrid[i][j + 1].getRed() - pixelGrid[i][j - 1].getRed(), 2) +
-                            Math.pow(pixelGrid[i][j + 1].getGreen() - pixelGrid[i][j - 1].getGreen(), 2) +
-                            Math.pow(pixelGrid[i][j + 1].getBlue() - pixelGrid[i][j - 1].getBlue(), 2));
-
-                    energyGrid[i][j] = energy;
-                }
-            }
-        }
-    }
-
 
     public static void main(String[] args) {
         ImageObject m = new ImageObject();
     }
+
+
+    public EnergyGrid getEnergyGrid() {
+        return energyGrid;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
 }
+
+//write tests for everything
+// put everything into little classes
+//1. Read image into buffered image (either color[][] or int[][])
+//2. calculate double[][] energy
+//3. find the lowest energy vertical seam (or horizontal)
+//4. remove seam
+//5. Go to step 2 (until hit the number of seams you want to remove vertically and then also horizontal)
 
