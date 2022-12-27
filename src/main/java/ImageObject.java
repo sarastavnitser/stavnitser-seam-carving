@@ -33,23 +33,20 @@ public class ImageObject {
         }
     }
 
-
     private void generatePixelArray() {
         width = image.getWidth();
         height = image.getHeight();
         pixelGrid = new Color[height][width];
-
-
-
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 pixelGrid[row][col] = new Color(image.getRGB(col, row));
             }
         }
-
-
     }
 
+    private void removeSmallestVerticalSeam(){
+
+    }
     public static void main(String[] args) {
         ImageObject m = new ImageObject();
     }
