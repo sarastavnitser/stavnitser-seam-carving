@@ -9,9 +9,9 @@ import static javax.imageio.ImageIO.read;
 public class ImageObject {
     private BufferedImage image;
 
-
     private EnergyGrid energyGrid;
     private Color[][] pixelGrid;
+    private SeamRemover seamRemover = new SeamRemover();
 
 
     private int height;
@@ -19,13 +19,15 @@ public class ImageObject {
     private int width;
 
 
-    public ImageObject() {
+    public ImageObject(File imageFile) {
         try {
-            File imageFile = new File(ImageObject.class.getResource("camera-icon.png").getPath());
+
             image = ImageIO.read(imageFile);
+            width = image.getWidth();
+            height = image.getHeight();
             generatePixelArray();
 
-            energyGrid = new EnergyGrid(pixelGrid, height, width);
+            energyGrid = new EnergyGrid(pixelGrid);
 
 
         } catch (IOException e) {
@@ -34,8 +36,7 @@ public class ImageObject {
     }
 
     private void generatePixelArray() {
-        width = image.getWidth();
-        height = image.getHeight();
+
         pixelGrid = new Color[height][width];
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
@@ -44,12 +45,9 @@ public class ImageObject {
         }
     }
 
-    private void removeSmallestVerticalSeam(){
-
-    }
-    public static void main(String[] args) {
-        ImageObject m = new ImageObject();
-    }
+//    public static void main(String[] args) {
+//        ImageObject m = new ImageObject();
+//    }
 
 
     public EnergyGrid getEnergyGrid() {
@@ -62,6 +60,32 @@ public class ImageObject {
 
     public int getWidth() {
         return width;
+    }
+    public Color[][] getPixelGrid(){
+        return pixelGrid;
+    }
+    public void setPixelGrid(Color[][] pixelGrid){
+        this.pixelGrid = pixelGrid;
+    }
+    public void removeSmallestVerticalSeam(){
+//        VerticalSeamCreator creator = new VerticalSeamCreator(this);
+        seamRemover.removeSmallestVerticalSeam(this);
+    }
+    public void removeSmallestHorizontalSeam(){
+        seamRemover.removeSmallestHorizontalSeam(this);
+
+    }
+    public  void setHeight(int height){
+        this.height = height;
+    }
+    public void setWidth(int width){
+        this.width = width;
+    }
+    public void setEnergyGrid(EnergyGrid energyGrid){
+        this.energyGrid = energyGrid;
+    }
+    public void resetImageToCurrentPixelGrid(){
+        //take current pixel grid and create image out of it, set the BufferedImage (this.image) to be the new image of this class
     }
 }
 

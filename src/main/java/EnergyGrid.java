@@ -13,10 +13,10 @@ public class EnergyGrid {
     private BufferedImage energyPic;
     private BufferedImage invertedEnergyPic;
 
-    public EnergyGrid(Color[][] pixelGrid, int height, int width) {
+    public EnergyGrid(Color[][] pixelGrid) {
         this.pixelGrid = pixelGrid;
-        this.height = height;
-        this.width = width;
+        this.height = pixelGrid.length;
+        this.width = pixelGrid[0].length;
         generateEnergyGrid();
     }
 

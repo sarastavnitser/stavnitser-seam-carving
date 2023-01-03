@@ -1,26 +1,41 @@
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
+import java.io.File;
+import java.io.IOException;
 
-public class SeamCreator {
-    private ImageObject imageObject;
+public class HorizontalSeamCreator {
+//    private ImageObject imageObject;
     private int[][] energyGrid;
     private int[] points;
     private int[][] positions;
-    private int[] smallestSeam;
+    //    private int[] smallestSeam;
     private int[] newPoints;
     private int height;
     private int width;
 
-    public SeamCreator(ImageObject imageObject) {
-        this.imageObject = imageObject;
-        this.energyGrid = imageObject.getEnergyGrid().getEnergyGrid();
-        this.points = new int[imageObject.getWidth()];
-        this.positions = new int[imageObject.getWidth()][imageObject.getHeight()];
+    public HorizontalSeamCreator(ImageObject imageObject) {
+//        this.imageObject = imageObject;
+        this.energyGrid = invert2DArray( imageObject.getEnergyGrid().getEnergyGrid());
+
+        this.points = new int[energyGrid[0].length];
+        this.positions = new int[energyGrid[0].length][energyGrid.length];
         setPointsAndPositions();
-        createSmallestSeam();
+
+    }
+    public int[][] invert2DArray(int[][] array) {
+        int rows = array.length;
+        int cols = array[0].length;
+        int[][] newArray = new int[cols][rows];
+        for(int i = 0; i < cols; i ++){
+            for (int j = 0; j < rows; j ++){
+                newArray[i][j] = array[j][i];
+            }
+        }
+        return newArray;
     }
 
-    private void createSmallestSeam() {
+    public int[] createSmallestHorizontalSeam() {
+
         int minPoint = points[0];
         int minEndPos = 0;
         for (int i = 0; i < this.points.length; i++) {
@@ -29,12 +44,13 @@ public class SeamCreator {
                 minEndPos = i;
             }
         }
-        smallestSeam = new int[height];
+        int [] smallestSeam = new int[height];
         int currPos = minEndPos;
         for (int i = height-1;i >=0; i--){
             smallestSeam[i] = currPos;
             currPos = positions[currPos][i];
         }
+        return smallestSeam;
     }
 
     private void setPointsAndPositions() {
@@ -104,19 +120,53 @@ public class SeamCreator {
 
     }
 
-    public static void main(String[] args) {
-        ImageObject o = new ImageObject();
-        SeamCreator s = new SeamCreator(o);
+//    public static void main(String[] args) {
+//        File imageFile = new File(ImageObject.class.getResource("camera-icon.png").getPath());
+//        ImageObject o = new ImageObject(imageFile);
+//        VerticalSeamCreator s = new VerticalSeamCreator(o);
+//        SeamRemover r = new SeamRemover();
+//
+////        System.out.println(Arrays.toString(s.points));
+////        System.out.println(Arrays.deepToString(s.positions));
+////        System.out.println(Arrays.toString(s.smallestSeam));
+////        System.out.println(Arrays.deepToString(o.getEnergyGrid().getEnergyGrid()));
+////        System.out.println(o.getPixelGrid()[0].length);
+//        for (int i = 0; i < 10; i ++){
+//            o.removeSmallestVerticalSeam();
+//        }
+//
+////        System.out.println(o.getPixelGrid()[0].length);
+//
+////        System.out.println(o.getPixelGrid()[0].length);
+////        System.out.println(Arrays.deepToString(o.getEnergyGrid().getEnergyGrid()));
+////        System.out.println(Arrays.deepToString(o.getPixelGrid()));
+//        BufferedImage energyPic = new BufferedImage(o.getWidth(), o.getHeight(), BufferedImage.TYPE_INT_RGB);
+//        for (int i = 0; i < o.getHeight(); i++) {
+//            for (int j = 0; j < o.getWidth(); j++) {
+//                energyPic.setRGB(j, i, o.getPixelGrid()[i][j].getRGB());
+//
+//            }
+//        }
+//        String fileOut = "generatedImage.jpg";
+//        String invertedFileOut = "invertedGeneratedImage.jpg";
+//        sendImageOut(energyPic, fileOut);
+//
+////        System.out.println(Arrays.deepToString(r.removeSmallestSeam(o, s.smallestSeam)));
+////        System.out.println(Arrays.deepToString(o.getEnergyGrid().getEnergyGrid()));
+//
+//
+//        System.out.printf("done");
+//    }
+//    private static void sendImageOut(BufferedImage image, String fileOut) {
+//        try {
+//            File outputfile = new File(fileOut);
+//            ImageIO.write(image, "jpg", outputfile);
+//
+//        } catch (IOException e) {
+//            System.out.println("could not save file..."); // use e.getMessage()
+//        }
+//    }
 
-        System.out.println(Arrays.toString(s.points));
-        System.out.println(Arrays.deepToString(s.positions));
-        System.out.println(Arrays.toString(s.smallestSeam));
-        System.out.printf("done");
-    }
 
-
-    public int[] getSmallestSeam() {
-        return smallestSeam;
-    }
 
 }
