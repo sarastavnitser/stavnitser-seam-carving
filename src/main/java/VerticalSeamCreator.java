@@ -109,18 +109,18 @@ public class VerticalSeamCreator {
 
     }
 
-    public static void main(String[] args) {
-        File imageFile = new File(ImageObject.class.getResource("Broadway_tower_edit.jpg").getPath());
-        ImageObject o = new ImageObject(imageFile);
-        VerticalSeamCreator s = new VerticalSeamCreator(o);
-        SeamRemover r = new SeamRemover();
+    public static void main(String[] args) throws IOException {
+//        File imageFile = new File(ImageObject.class.getResource("Broadway_tower_edit.jpg").getPath());
+        BufferedImage image = ImageIO.read(ImageFrame.class.getResourceAsStream("Broadway_tower_edit.jpg"));
+        ImageObject o = new ImageObject(image);
+
 
 //        System.out.println(Arrays.toString(s.points));
 //        System.out.println(Arrays.deepToString(s.positions));
 //        System.out.println(Arrays.toString(s.smallestSeam));
 //        System.out.println(Arrays.deepToString(o.getEnergyGrid().getEnergyGrid()));
 //        System.out.println(o.getPixelGrid()[0].length);
-        for (int i = 0; i < 10; i ++){
+        for (int i = 0; i < 20; i ++){
             o.removeSmallestVerticalSeam();
             o.removeSmallestHorizontalSeam();
         }
