@@ -29,7 +29,11 @@ public class ImageFrame extends JFrame {
         JButton loadButton = new JButton("Load");
         northPanel.add(loadButton);
         loadButton.addActionListener(event -> {
-            chooseFile();
+            try {
+                chooseFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         });
         JButton resetButton = new JButton("Reset");
         northPanel.add(resetButton);
@@ -47,7 +51,10 @@ public class ImageFrame extends JFrame {
         BufferedImage image;
         try {
             image = ImageIO.read(ImageFrame.class.getResourceAsStream("Broadway_tower_edit.jpg"));
+            currentFile = new File(ImageFrame.class.getResource("Broadway_tower_edit.jpg").getPath());
             loadSeamImage(image);
+            setSize(image.getWidth(null), image.getHeight(null));
+            pack();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -57,9 +64,10 @@ public class ImageFrame extends JFrame {
     }
     private  void resetImage() throws IOException {
         loadSeamImage(ImageIO.read(currentFile));
+        loadSeamImage(ImageIO.read(currentFile));
     }
 
-    private void chooseFile() {
+    private void chooseFile() throws IOException {
         JFileChooser fileChooser = new JFileChooser();
         int result = fileChooser.showOpenDialog(this);
 
@@ -72,6 +80,7 @@ public class ImageFrame extends JFrame {
                 throw new RuntimeException(e);
             }
         }
+        this.resetImage();
     }
 
     public void loadSeamImage(BufferedImage image) {
@@ -87,11 +96,13 @@ public class ImageFrame extends JFrame {
 
     private void setSeamImageSize(int width, int height) {
         // generate a newImage with the new width and height
-        for (int i = 0; i < imageObject.getWidth() - width; i ++){
-            imageObject.removeSmallestVerticalSeam();
-        }
-        for(int i = 0; i < imageObject.getHeight() - height; i ++){
+        int difHeight = imageObject.getHeight() - height;
+        int difWidth = imageObject.getWidth() - width;
+        for(int i = 0; i < difHeight; i ++){
             imageObject.removeSmallestHorizontalSeam();
+        }
+        for (int i = 0; i < difWidth; i ++){
+            imageObject.removeSmallestVerticalSeam();
         }
         imageObject.resetImage();
 
